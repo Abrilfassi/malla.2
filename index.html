@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Malla Interactiva</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f5f6fa;
+      padding: 30px;
+      margin: 0;
+      color: #2f3640;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .user-input {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      flex-grow: 1;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      background-color: #6c5ce7;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #5a4bcf;
+    }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .subject {
+      flex: 1 1 120px;
+      padding: 10px;
+      text-align: center;
+      border-radius: 12px;
+      background-color: #dfe6e9;
+      transition: 0.3s ease;
+      user-select: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .subject.regular {
+      background-color: #ffeaa7;
+      text-decoration: none;
+    }
+
+    .subject.aprobada {
+      background-color: #55efc4;
+      text-decoration: line-through;
+    }
+
+    .progress {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="user-input">
+      <input type="text" id="username" placeholder="Escribe tu nombre..." />
+      <button onclick="loadProgress()">Cargar</button>
+    </div>
+
+    <div class="grid" id="subjectsGrid">
+      <!-- Ejemplo de materias -->
+      <div class="subject">Matemática I</div>
+      <div class="subject">Física I</div>
+      <div class="subject">Programación</div>
+      <div class="subject">Química</div>
+      <div class="subject">Álgebra</div>
+      <div class="subject">Estadística</div>
+      <!-- Agrega todas tus materias acá -->
+    </div>
+
+    <div class="progress" id="progressDisplay">Avance: 0%</div>
+  </div>
+
+  <script>
+    let currentUser = "";
+
+    function loadProgress() {
+      const name = document.getElementById("username").value.trim();
+      if (!name) return alert("Por favor, escribe tu nombre");
+
+      currentUser = name;
+      const saved = localStorage.getItem("progreso_" + name);
+      const subjects = document.querySelectorAll(".subject");
+
+      if (saved) {
+        const states = JSON.parse(saved);
+        subjects.forEach((el, i) => {
+          el.classList.remove("regular", "aprobada");
+          if (states[i] === 1) el.classList.add("regular");
+          if (states[i] === 2) el.classList.add("aprobada");
+        });
+      } else {
+        subjects.forEach(el => el.classList.remove("regular", "aprobada"));
+      }
+
+      updateProgress();
+    }
+
+    function saveProgress() {
+      if (!currentUser) return;
+      const subjects = document.querySelectorAll(".subject");
+      const states = Array.from(subjects).map(el => 
+        el.classList.contains("aprobada") ? 2 :
+        el.classList.contains("regular") ? 1 : 0
+      );
+      localStorage.setItem("progreso_" + currentUser, JSON.stringify(states));
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const subjects = document.querySelectorAll(".subject");
+      const total = subjects.length;
+      const aprobadas = Array.from(subjects).filter(el => el.classList.contains("aprobada")).length;
+      const porcentaje = ((aprobadas / total) * 100).toFixed(1);
+      document.getElementById("progressDisplay").textContent = `Avance: ${porcentaje}%`;
+    }
+
+    document.querySelectorAll(".subject").forEach(el => {
+      el.addEventListener("click", () => {
+        if (el.classList.contains("aprobada")) {
+          el.classList.remove("aprobada");
+          el.classList.remove("regular");
+        } else if (el.classList.contains("regular")) {
+          el.classList.remove("regular");
+          el.classList.add("aprobada");
+        } else {
+          el.classList.add("regular");
+        }
+        saveProgress();
+      });
+    });
+  </script>
+</body>
+</html>
