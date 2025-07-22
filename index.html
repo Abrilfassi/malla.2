@@ -94,9 +94,89 @@
 
   <script>
     const materias = [
-      'Matemática I', 'Física I', 'Química', 'Programación', 'Álgebra',
-      'Matemática II', 'Física II', 'Estadística', 'Estructuras de Datos', 'Sistemas Operativos',
-      'Matemática III', 'Análisis Numérico', 'Bases de Datos', 'Ingeniería de Software', 'Redes'
+     <div class="anio">
+    <div class="bloque">
+      <h2>Ingreso</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Ambientación Universitaria</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Matemática</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Física y Química</div>
+    </div>
+    <div class="bloque">
+      <h2>1.º Año - 1.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:aprobada">Análisis Matemático 1</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:aprobada, Ambientación Universitaria:aprobada">Taller y Laboratorio </div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:aprobada,Física y Química:aprobada">Química</div>
+    </div>
+    <div class="bloque">
+      <h2>1.º Año - 2.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Matemática:regular">Álgebra Lineal</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular, Física y Química:regular">Física 1</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Química:regular">Química Orgánica y Biológica</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Sistemas de Representación</div>
+    </div>
+ <div class="anio">
+  <div class="bloque">
+      <h2>2.º Año - 3.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular, Álgebra Lineal:regular">Análisis Matemático 2</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Álgebra Lineal:regular, Física 1:regular">Física 2</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Química Orgánica y Biológica:regular">Anatomía para Ingenieros</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física 1:regular">Estática y Resistencia de los Materiales </div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos=""> Modulo de Inglés </div>
+    </div>
+   <div class="bloque">
+      <h2>2.º Año - 4.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 2:regular">Análisis Matemático 3</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física 2:regular, Taller y Laboratorio:regular">Electrónica</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Anatomía para Ingenieros:regular">Histológia para Ingenieros</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular">Informática y Cálculo Numérico</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular">Probabilidad y Estadística</div>
+    </div>
+    <div class="anio">
+  <div class="bloque">
+      <h2>3.º Año - 5.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Taller y Laboratorio:regular, Informática y Cálculo Númerico:regular">Electrónica Digital 1</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física 2:regular">Electrotecnia General Y Máquinas Eléctricas</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Histología para Ingenieros:regular, Física 2:regular">Fisiología Humana </div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 3:regular">Señales y Sistemas </div>
+    </div>
+   <div class="bloque">
+      <h2>3.º Año - 6.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Fisiología Humana:regular,Estática y Resistencia de los Materiales:regular ">Biomateriales</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Electrónica Digital 1:regular">Electrónica Digital 2</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Fisiolgía Humana:regular">Física Biomédica</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Análisis Matemático 1:regular">Ingeniería Económica y Legal</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Electrotecnia General Y Máquinas Eléctricas:regular, Señales y Sistemas:regular">Teoría de Redes y Control </div>
+    </div>
+      <div class="bloque">
+      <h2>4.º Año - 7.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Electrónica:regular, Teoría de Redes y Control:regular">Electrónica Analógica</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física Biomédica:regular, Biomateriales:regular">Fisiopatológia</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Electrotecnia General Y Máquinas Eléctricas:regular, Sistemas de Representación:regular">Instalaciones Hospitalarias </div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Informática y Cálculo Númerico:regular,Análisis Matemático 3:regular,Señales y Sistemas:regular">Procesamiento de Señales </div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Teoría de Redes y Control:regular">Transductores y Sensores</div>
+    </div>
+   <div class="bloque">
+      <h2>4.º Año - 8.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Anatomía para Ingenieros:regular,Estática y Resistencia de los Materiales:regular,Análisis Matemático 2:regular ">Biomecánica</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Procesamiento de Señales:regular,Fisiolgía Humana:regular, Física 2:regular">Imágenes en Medcicina</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Transductores y Sensores:regular,Electrónica Analógica:regular, Electrónica Digital 2:regular">Instrumentación Biomédica</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Práctica Profesional Supervisada </div>
+    </div>
+      <div class="bloque">
+      <h2>5.º Año - 9.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Fisiopatología:regular,Transductores y Sensores:regular, Biomecánica:regular">Ingeniería en Rehabilitación</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Imágenes en Medicina:regular, Instalaciones Hospitalarias:regular, Instrumentación Biomédica">Ingeniería Hospitalaria</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Probabilidad y Estadística:regular, Informática y Cálculo Númercico:regular">Modelos y Simulación</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Selectiva 1 </div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Física Biomédica:regular,Imágenes en Medicina:regular">Radiaciones Ionizantes en Medicina</div>
+    </div>
+   <div class="bloque">
+      <h2>5.º Año - 10.º Cuatrimestre</h2>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Ingeniería Hospitalaria:regular,Radiaciones Ionizantes en Medicina:regular,Ingeniería Económica y Legal:regular ">Higiene y Seguridad</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="Intrumentación Biomédica:regular ">Seguridad y Normalización Biomédica</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Selectiva 2</div>
+      <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Proyecto Integrador</div>
+    </div>
     ];
 
     const materiasContainer = document.getElementById('materias');
