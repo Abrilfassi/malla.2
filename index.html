@@ -1,99 +1,137 @@
-<!DOCTYPE html>
+<!-- CÓDIGO COMPLETO MODIFICADO -->
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Malla Curricular Interactiva</title>
+  <title>Plan de Estudios Ingeniería Biomédica</title>
   <style>
     :root {
-      --color-regular: #f9cb9c;
-      --color-aprobada: #b6d7a8;
-      --color-base: #704a4c;
+      --color-regular: #91c4f2;
+      --color-aprobada: #72d38d;
+      --color-bloque: #f1f1f1;
+      --color-titulo: #2c3e50;
+      --color-bloqueada: #ddd;
     }
 
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #fdf6f2;
-      color: #333;
+      background: #e8dddd;
+      margin: 0;
       padding: 20px;
     }
 
     h1 {
-      color: var(--color-base);
       text-align: center;
+      color: var(--color-titulo);
     }
 
-    #nombreInput {
-      padding: 10px;
-      border: 2px solid var(--color-base);
-      border-radius: 8px;
-      font-size: 16px;
-      width: 250px;
-      margin-right: 10px;
+    .anio {
+      margin-bottom: 40px;
     }
 
-    #cargarBtn {
-      background-color: var(--color-base);
-      color: white;
-      border: none;
-      padding: 10px 16px;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+    .bloque {
+      background: var(--color-bloque);
+      border-radius: 20px;
+      padding: 15px;
+      margin: 10px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
     }
 
-    #cargarBtn:hover {
-      background-color: #a26466;
+    .bloque h2 {
+      font-size: 1.2rem;
+      margin-bottom: 10px;
     }
 
     .materia {
-      display: inline-block;
-      padding: 12px 18px;
-      margin: 8px;
-      border: 2px solid var(--color-base);
-      border-radius: 12px;
+      background: white;
+      border-radius: 10px;
+      margin: 6px 0;
+      padding: 8px 12px;
       cursor: pointer;
+      transition: all 0.3s ease;
+      border-left: 8px solid transparent;
       user-select: none;
-      transition: background-color 0.3s, transform 0.2s;
-      font-size: 14px;
     }
 
-    .materia:hover {
-      transform: scale(1.05);
+    .materia.regular {
+      background: var(--color-regular);
+      border-left-color: #dac1b1;
     }
 
-    .regular {
-      background-color: var(--color-regular);
-      text-decoration: none;
-    }
-
-    .aprobada {
-      background-color: var(--color-aprobada);
+    .materia.aprobada {
+      background: var(--color-aprobada);
       text-decoration: line-through;
+      border-left-color: #ac746c;
     }
 
-    #progreso {
-      margin-top: 20px;
-      font-size: 18px;
+    .materia.bloqueada {
+      background: var(--color-bloqueada);
+      cursor: not-allowed;
+      opacity: 0.5;
+      pointer-events: none;
+      color: #666;
+    }
+
+    #avanceContainer {
+      max-width: 300px;
+      margin: 0 auto 30px auto;
+    }
+
+    #usuarioPanel {
       text-align: center;
-      color: #555;
+      margin-bottom: 20px;
+    }
+
+    #usuarioPanel input {
+      padding: 8px;
+      font-size: 1rem;
+    }
+
+    #usuarioPanel button {
+      padding: 8px 12px;
+      margin-left: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    #accionesUsuario {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    #accionesUsuario button {
+      padding: 8px 14px;
+      margin: 0 5px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    #nombreActual {
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
   <h1>Malla Curricular Interactiva</h1>
 
-  <div style="text-align: center; margin-bottom: 20px;">
-    <input type="text" id="nombreInput" placeholder="Ingresá tu nombre" />
-    <button id="cargarBtn">Cargar</button>
+  <div id="usuarioPanel">
+    <input type="text" id="nombreUsuario" placeholder="Ingrese su Matricula" />
+    <button onclick="iniciarSesion()">Ingresar</button>
   </div>
 
-  <div id="materias" style="text-align: center;"></div>
-  <div id="progreso"></div>
+  <div id="accionesUsuario" style="display:none;">
+    Usuario actual: <span id="nombreActual"></span>
+    <button onclick="cambiarUsuario()">Cambiar de usuario</button>
+    <button onclick="borrarProgreso()">Borrar progreso</button>
+  </div>
 
-  <script>
-    const materias = [
+  <div id="avanceContainer">
+    <canvas id="graficoAvance"></canvas>
+  </div>
+
+  <div id="malla" style="display:none;">
+    <!-- PEGÁ AQUÍ EL BLOQUE DE LAS MATERIAS TAL COMO LO TENÉS -->
+
      <div class="anio">
     <div class="bloque">
       <h2>Ingreso</h2>
@@ -177,72 +215,158 @@
       <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Selectiva 2</div>
       <div class="materia" onclick="cambiarEstado(this)" data-prerrequisitos="">Proyecto Integrador</div>
     </div>
-    ];
+  </div>
 
-    const materiasContainer = document.getElementById('materias');
-    const progresoDiv = document.getElementById('progreso');
-    const nombreInput = document.getElementById('nombreInput');
-    const cargarBtn = document.getElementById('cargarBtn');
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const totalMaterias = 47;
+    let usuarioActual = null;
 
-    let estado = {};
-    let usuario = '';
-
-    function actualizarProgreso() {
-      const total = materias.length;
-      const aprobadas = Object.values(estado).filter(e => e === 2).length;
-      const regularizadas = Object.values(estado).filter(e => e === 1).length;
-      const porcentaje = Math.round(((aprobadas + regularizadas * 0.5) / total) * 100);
-
-      progresoDiv.textContent = `Progreso: ${porcentaje}% (${aprobadas} aprobadas, ${regularizadas} regularizadas de ${total} materias)`;
+    function normalizarNombre(nombre) {
+      return nombre.trim().toLowerCase();
     }
 
-    function guardarEstado() {
-      if (usuario) {
-        localStorage.setItem(`malla_${usuario}`, JSON.stringify(estado));
+    function iniciarSesion() {
+      const input = document.getElementById('nombreUsuario');
+      const nombre = input.value.trim();
+      if (!nombre) return alert("Ingresá tu nombre");
+
+      usuarioActual = normalizarNombre(nombre);
+      document.getElementById('usuarioPanel').style.display = 'none';
+      document.getElementById('malla').style.display = 'block';
+      document.getElementById('accionesUsuario').style.display = 'block';
+      document.getElementById('nombreActual').innerText = nombre;
+
+      cargarProgreso();
+      actualizarGrafico();
+      actualizarBloqueos();
+    }
+
+    function cambiarUsuario() {
+      location.reload();
+    }
+
+    function borrarProgreso() {
+      if (confirm("¿Estás seguro de que querés borrar todo tu progreso?")) {
+        localStorage.removeItem(`malla_${usuarioActual}`);
+        location.reload();
       }
     }
 
-    function cargarEstado() {
-      materiasContainer.innerHTML = '';
-      estado = {};
+    function cambiarEstado(elemento) {
+      if (elemento.classList.contains('bloqueada')) return;
 
-      const guardado = localStorage.getItem(`malla_${usuario}`);
-      if (guardado) {
-        estado = JSON.parse(guardado);
+      if (elemento.classList.contains('aprobada')) {
+        elemento.classList.remove('aprobada');
+      } else if (elemento.classList.contains('regular')) {
+        elemento.classList.remove('regular');
+        elemento.classList.add('aprobada');
+      } else {
+        elemento.classList.add('regular');
       }
 
-      materias.forEach((materia, index) => {
-        const btn = document.createElement('div');
-        btn.className = 'materia';
-        btn.textContent = materia;
+      guardarProgreso();
+      actualizarGrafico();
+      actualizarBloqueos();
+    }
 
-        const estadoMateria = estado[index] || 0;
-        if (estadoMateria === 1) btn.classList.add('regular');
-        if (estadoMateria === 2) btn.classList.add('aprobada');
-
-        btn.addEventListener('click', () => {
-          estado[index] = (estado[index] + 1) % 3;
-          btn.classList.remove('regular', 'aprobada');
-          if (estado[index] === 1) btn.classList.add('regular');
-          if (estado[index] === 2) btn.classList.add('aprobada');
-          guardarEstado();
-          actualizarProgreso();
-        });
-
-        materiasContainer.appendChild(btn);
+    function guardarProgreso() {
+      const progreso = {};
+      document.querySelectorAll('.materia').forEach(materia => {
+        if (materia.classList.contains('aprobada')) {
+          progreso[materia.textContent.trim()] = 'aprobada';
+        } else if (materia.classList.contains('regular')) {
+          progreso[materia.textContent.trim()] = 'regular';
+        }
       });
-
-      actualizarProgreso();
+      localStorage.setItem(`malla_${usuarioActual}`, JSON.stringify(progreso));
     }
 
-    cargarBtn.addEventListener('click', () => {
-      const nombreIngresado = nombreInput.value.trim();
-      if (!nombreIngresado) {
-        alert("Por favor, ingresá tu nombre.");
-        return;
+    function cargarProgreso() {
+      const datos = JSON.parse(localStorage.getItem(`malla_${usuarioActual}`)) || {};
+      document.querySelectorAll('.materia').forEach(materia => {
+        materia.classList.remove('regular', 'aprobada');
+        const estado = datos[materia.textContent.trim()];
+        if (estado) materia.classList.add(estado);
+      });
+    }
+
+    function contarAprobadas() {
+      return document.querySelectorAll('.materia.aprobada').length;
+    }
+
+    function actualizarGrafico() {
+      const aprobadas = contarAprobadas();
+      const restante = totalMaterias - aprobadas;
+      graficoAvance.data.datasets[0].data = [aprobadas, restante];
+      graficoAvance.update();
+    }
+
+    function actualizarBloqueos() {
+      const materias = document.querySelectorAll('.materia');
+
+      materias.forEach(materia => {
+        const prereqs = materia.getAttribute('data-prerrequisitos');
+        if (!prereqs || prereqs.trim() === "") {
+          materia.classList.remove('bloqueada');
+          materia.style.pointerEvents = 'auto';
+          return;
+        }
+
+        const prereqList = prereqs.split(',').map(p => p.trim()).filter(p => p !== "");
+        let bloqueada = false;
+
+        for (let prereq of prereqList) {
+          let [nombre, estadoReq] = prereq.split(':').map(x => x.trim().toLowerCase());
+          if (!estadoReq) estadoReq = 'aprobada';
+
+          const materiaPrereq = Array.from(document.querySelectorAll('.materia'))
+            .find(m => normalizarNombre(m.textContent) === nombre);
+
+          if (!materiaPrereq) {
+            bloqueada = true;
+            break;
+          }
+
+          const esRegular = materiaPrereq.classList.contains('regular');
+          const esAprobada = materiaPrereq.classList.contains('aprobada');
+
+          if (estadoReq === 'aprobada' && !esAprobada) {
+            bloqueada = true;
+            break;
+          }
+
+          if (estadoReq === 'regular' && !(esRegular || esAprobada)) {
+            bloqueada = true;
+            break;
+          }
+        }
+
+        if (bloqueada) {
+          materia.classList.add('bloqueada');
+        } else {
+          materia.classList.remove('bloqueada');
+        }
+      });
+    }
+
+    const ctx = document.getElementById('graficoAvance');
+    const graficoAvance = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Aprobadas', 'Restantes'],
+        datasets: [{
+          data: [0, totalMaterias],
+          backgroundColor: ['#b5ead7', '#f3f3f3'],
+        }]
+      },
+      options: {
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
       }
-      usuario = nombreIngresado;
-      cargarEstado();
     });
   </script>
 </body>
